@@ -8,7 +8,7 @@ module Gibbon
 
     attr_accessor :category_name, :api_key, :api_endpoint, :timeout, :throws_exceptions, :default_params
 
-    def initialize(category_name, api_key, timeout, throws_exceptions, api_endpoint, default_params)
+    def initialize(category_name, api_key, timeout, throws_exceptions, api_endpoint, default_params, options = {})
       @category_name = category_name
       @api_key = api_key
       @api_endpoint = api_endpoint
@@ -16,6 +16,7 @@ module Gibbon
       @throws_exceptions = throws_exceptions
       @timeout = timeout
 
+      self.class.http_proxy(options[:http_proxyaddr], options[:http_proxyport], options[:http_proxyuser], options[:http_proxypass])
       set_instance_defaults
     end
 
