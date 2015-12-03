@@ -2,7 +2,7 @@ module Gibbon
   class API
     attr_accessor :api_key, :api_endpoint, :timeout, :throws_exceptions
 
-    def initialize(api_key = nil, default_parameters = {})
+    def initialize(api_key = nil, default_parameters = {}, options = {})
       @api_key = api_key || self.class.api_key || ENV['MAILCHIMP_API_KEY']
       @api_key = @api_key.strip if @api_key
 
@@ -11,6 +11,7 @@ module Gibbon
       @throws_exceptions = default_parameters.has_key?(:throws_exceptions) ? default_parameters.delete(:throws_exceptions) : self.class.throws_exceptions
 
       @default_params = {:apikey => @api_key}.merge(default_parameters)
+      @options = options
     end
 
     def get_exporter
@@ -18,7 +19,7 @@ module Gibbon
     end
 
     def method_missing(method, *args)
-      api = APICategory.new(method.to_s, @api_key, @timeout, @throws_exceptions, @api_endpoint, @default_params)
+      api = APICategory.new(method.to_s, @api_key, @timeout, @throws_exceptions, @api_endpoint, @default_params, @options)
       api.api_endpoint = @api_endpoint if @api_endpoint
       api
     end
